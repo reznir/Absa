@@ -16,7 +16,7 @@ internal class Program
 
             (int seats, List<List<int>> listOfLists) = ParseString(input);
 
-            var inputs = input.Split(new char[] { ']', ' ', ',', ':', ';', '-', '|' }, StringSplitOptions.RemoveEmptyEntries);
+            //var inputs = input.Split(new char[] { ']', ' ', ',', ':', ';', '-', '|' }, StringSplitOptions.RemoveEmptyEntries);
 
             //if (!int.TryParse(inputs[0], out int number))
             //{
@@ -24,35 +24,35 @@ internal class Program
             //    return;
             //}
 
-            List<List<int>> lists = new List<List<int>>();
-            List<int> numbers = new();
-            for (int i = 0; i < inputs.Length; i++)
-            {
-                if (inputs[i].StartsWith("["))
-                {
-                    lists.Add(numbers);
-                    numbers = new List<int>
-                {
-                    Convert.ToInt32(inputs[i].Substring(1))
-                };
-                }
-                else if (int.TryParse(inputs[i], out int requestSeat))
-                { numbers.Add(requestSeat); }
-            }
-            lists.Add(numbers);
-            lists.RemoveAt(0);
+            //List<List<int>> lists = new List<List<int>>();
+            //List<int> numbers = new();
+            //for (int i = 0; i < inputs.Length; i++)
+            //{
+            //    if (inputs[i].StartsWith("["))
+            //    {
+            //        lists.Add(numbers);
+            //        numbers = new List<int>
+            //    {
+            //        Convert.ToInt32(inputs[i].Substring(1))
+            //    };
+            //    }
+            //    else if (int.TryParse(inputs[i], out int requestSeat))
+            //    { numbers.Add(requestSeat); }
+            //}
+            //lists.Add(numbers);
+            //lists.RemoveAt(0);
 
-            if (lists.Count > seats)
+            if (listOfLists.Count > seats)
             {
                 Console.WriteLine("No");
                 continue;
             }
 
-            if (CanPickUniqueNumbers(lists, 0, seats, new List<int>()))
+            if (CanPickUniqueNumbers(listOfLists, 0, listOfLists.Count, new List<int>()))
             { Console.WriteLine("Yes"); }
             else
             { Console.WriteLine("No"); }
-
+            
             Console.ReadLine();
         }
     }
@@ -74,7 +74,7 @@ internal class Program
         List<string> list = new List<string>();
         foreach (Match match in Regex.Matches(input, @"\d+"))
         {
-            list.Add(match.Groups[1].Value);
+            list.Add(match.Value);
         }
         return list;
     }

@@ -14,33 +14,7 @@ internal class Program
                 return;
             }
 
-            (int seats, List<List<int>> listOfLists) = ParseString(input);
-
-            //var inputs = input.Split(new char[] { ']', ' ', ',', ':', ';', '-', '|' }, StringSplitOptions.RemoveEmptyEntries);
-
-            //if (!int.TryParse(inputs[0], out int number))
-            //{
-            //    Console.WriteLine("error, vole.");
-            //    return;
-            //}
-
-            //List<List<int>> lists = new List<List<int>>();
-            //List<int> numbers = new();
-            //for (int i = 0; i < inputs.Length; i++)
-            //{
-            //    if (inputs[i].StartsWith("["))
-            //    {
-            //        lists.Add(numbers);
-            //        numbers = new List<int>
-            //    {
-            //        Convert.ToInt32(inputs[i].Substring(1))
-            //    };
-            //    }
-            //    else if (int.TryParse(inputs[i], out int requestSeat))
-            //    { numbers.Add(requestSeat); }
-            //}
-            //lists.Add(numbers);
-            //lists.RemoveAt(0);
+            (int seats, List<List<int>> listOfLists)  = ParseString(input);
 
             if (listOfLists.Count > seats)
             {
@@ -48,7 +22,7 @@ internal class Program
                 continue;
             }
 
-            if (CanPickUniqueNumbers(listOfLists, 0, listOfLists.Count, new List<int>()))
+            if (CanPickUniqueNumbers(listOfLists, 0, listOfLists.Count, new HashSet<int>()))
             { Console.WriteLine("Yes"); }
             else
             { Console.WriteLine("No"); }
@@ -57,6 +31,11 @@ internal class Program
         }
     }
 
+    /// <summary>
+    /// Parses input like *number*[*number*,*number*] to one int and list of lists of ints
+    /// </summary>
+    /// <param name="input">input string to be parsed</param>
+    /// <returns>tupple of int and List of Lists of ints</returns>
     static (int, List<List<int>>) ParseString(string input)
     {
         int number = Convert.ToInt32(Regex.Match(input, @"\d+").Value);
@@ -64,11 +43,16 @@ internal class Program
         var listOfLists = new List<List<int>>();
         foreach (Match match in matches)
         {
-            listOfLists.Add(ParseList(match.Groups[1].Value).Select(m => Convert.ToInt32(m)).ToList());//.Split(',').Select(m => Convert.ToInt32(m)).ToHashSet();            
+            listOfLists.Add(ParseList(match.Groups[1].Value).Select(m => Convert.ToInt32(m)).ToList());     
         }
         return (number, listOfLists);
     }
 
+    /// <summary>
+    /// Parses input string containing numbers to List of strings that represents those numbers
+    /// </summary>
+    /// <param name="input">input string to be parsed</param>
+    /// <returns>List of strings containing numbers only</returns>
     static List<string> ParseList(string input)
     {
         List<string> list = new List<string>();
@@ -79,7 +63,15 @@ internal class Program
         return list;
     }
 
-    static bool CanPickUniqueNumbers(List<List<int>> lists, int index, int max, List<int> pickedNumbers)
+    /// <summary>
+    /// Scan lists if it is possible to pick up exactly one random number can be picked from every one of them
+    /// </summary>
+    /// <param name="lists">List of Lists of ints</param>
+    /// <param name="index">Should be 0 for start. Exists for recursion calling</param>
+    /// <param name="max">number of Lists of ints in lists property</param>
+    /// <param name="pickedNumbers">Should by new HashSet of ints as input. HashSet of ints for saving testing results for recursion calling</param>
+    /// <returns>bool: Is it possible to pick up exactly one random number can be picked from every List of ints?</returns>
+    static bool CanPickUniqueNumbers(List<List<int>> lists, int index, int max, HashSet<int> pickedNumbers)
     {
         if (index > max - 1)
         { return true; ; }

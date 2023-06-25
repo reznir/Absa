@@ -22,12 +22,10 @@ internal class Program
                 continue;
             }
 
-            if (CanPickUniqueNumbers(listOfLists, 0, listOfLists.Count, new HashSet<int>()))
+            if (CanPickUniqueNumbers(seats, listOfLists, 0, listOfLists.Count, new HashSet<int>()))
             { Console.WriteLine("Yes"); }
             else
             { Console.WriteLine("No"); }
-            
-            Console.ReadLine();
         }
     }
 
@@ -71,17 +69,17 @@ internal class Program
     /// <param name="max">number of Lists of ints in lists property</param>
     /// <param name="pickedNumbers">Should by new HashSet of ints as input. HashSet of ints for saving testing results for recursion calling</param>
     /// <returns>bool: Is it possible to pick up exactly one random number can be picked from every List of ints?</returns>
-    static bool CanPickUniqueNumbers(List<List<int>> lists, int index, int max, HashSet<int> pickedNumbers)
+    static bool CanPickUniqueNumbers(int seats, List<List<int>> lists, int index, int max, HashSet<int> pickedNumbers)
     {
         if (index > max - 1)
         { return true; ; }
 
         foreach (var num in lists[index])
         {
-            if (!pickedNumbers.Contains(num))
+            if (!pickedNumbers.Contains(num) && num <= seats)
             {
                 pickedNumbers.Add(num);
-                if (CanPickUniqueNumbers(lists, index + 1, max, pickedNumbers))
+                if (CanPickUniqueNumbers(seats,lists, index + 1, max, pickedNumbers))
                 {
                     return true;
                 }

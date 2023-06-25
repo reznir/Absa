@@ -11,7 +11,7 @@ internal class Program
             if (string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("error, vole.");
-                return;
+                continue;
             }
 
             (int seats, List<List<int>> listOfLists)  = ParseString(input);
